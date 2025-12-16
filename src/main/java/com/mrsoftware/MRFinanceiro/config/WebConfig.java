@@ -1,5 +1,7 @@
 package com.mrsoftware.MRFinanceiro.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,5 +30,16 @@ public class WebConfig {
     messageSource.setDefaultEncoding(CHARSET_ECODING);
     messageSource.setCacheSeconds(0);
     return messageSource;
+  }
+
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .info(
+            new Info()
+                .title("MRFinanceiro API")
+                .version("1.0.0")
+                .description("Documentação da API do Sistema MRFinanceiro.")
+                .termsOfService("http://meu-servico.com/terms"));
   }
 }

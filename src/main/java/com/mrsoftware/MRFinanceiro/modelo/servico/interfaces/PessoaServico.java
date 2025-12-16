@@ -13,4 +13,6 @@ public interface PessoaServico {
   PessoaRetornoDTO retornarPessoaPorId(String id);
 
   PessoaRetornoPaginadoDTO retornarPorFiltro(PessoaEntradaPaginadaDTO pessoaEntradaPaginadaDTO);
+
+  void excluir(String id);
 }

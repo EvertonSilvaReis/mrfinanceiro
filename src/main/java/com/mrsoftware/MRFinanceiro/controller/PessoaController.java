@@ -43,4 +43,10 @@ public class PessoaController {
     return new ResponseEntity<>(
         pessoaServico.retornarPorFiltro(pessoaEntradaPaginadaDTO), HttpStatus.OK);
   }
+
+  @DeleteMapping("id/{idPessoa}")
+  public ResponseEntity<Void> excluir(@PathVariable("idPessoa") String idPessoa) {
+    pessoaServico.excluir(idPessoa);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

@@ -15,6 +15,7 @@ import com.mrsoftware.MRFinanceiro.modelo.repositorios.PessoaRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ConfiguracaoServico;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.PessoaServico;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class PessoaServicoImpl implements PessoaServico {
     } catch (ExceptionAbstractImpl e) {
       throw e;
     } catch (Exception ex) {
-      log.error(MENSAGEM_ERRO, "cadastrar");
+      log.error(MENSAGEM_ERRO, "cadastrar", ex);
       throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
     }
   }
@@ -69,7 +70,7 @@ public class PessoaServicoImpl implements PessoaServico {
     } catch (ExceptionAbstractImpl e) {
       throw e;
     } catch (Exception ex) {
-      log.error(MENSAGEM_ERRO, "atualizar");
+      log.error(MENSAGEM_ERRO, "atualizar", ex);
       throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
     }
   }
@@ -83,7 +84,7 @@ public class PessoaServicoImpl implements PessoaServico {
     } catch (ExceptionAbstractImpl e) {
       throw e;
     } catch (Exception ex) {
-      log.error(MENSAGEM_ERRO, "retornar");
+      log.error(MENSAGEM_ERRO, "retornar", ex);
       throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
     }
   }
@@ -92,7 +93,6 @@ public class PessoaServicoImpl implements PessoaServico {
   public PessoaRetornoPaginadoDTO retornarPorFiltro(
       PessoaEntradaPaginadaDTO pessoaEntradaPaginadaDTO) {
     try {
-      log.info("Filtro - Nome: {}, CPF/CNPJ: {}", pessoaEntradaPaginadaDTO.getNome(), pessoaEntradaPaginadaDTO.getCpfCnpj());
       Pageable paginacao =
           PageRequest.of(
               pessoaEntradaPaginadaDTO.getPagina() > 0
@@ -115,7 +115,21 @@ public class PessoaServicoImpl implements PessoaServico {
     } catch (ExceptionAbstractImpl e) {
       throw e;
     } catch (Exception ex) {
-      log.error("Erro ao retornar pessoas por filtro: {}", ex.getMessage(), ex);
+      log.error(MENSAGEM_ERRO, "retornar", ex);
+      throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
+    }
+  }
+
+  @Override
+  public void excluir(String id) {
+    try {
+      Pessoa pessoa = obterPessoaPorId(IdUtil.obterUUID(id));
+      pessoa.setDataExclusao(LocalDateTime.now());
+      pessoaRepositorio.save(pessoa);
+    } catch (ExceptionAbstractImpl e) {
+      throw e;
+    } catch (Exception ex) {
+      log.error(MENSAGEM_ERRO, "excluir", ex);
       throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
     }
   }
