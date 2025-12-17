@@ -9,5 +9,5 @@ import lombok.Setter;
 public class TipoPagamentoEntradaDTO {
   @NotBlank private String descricao;
   @NotBlank private Boolean parcelado;
-  private Integer parcelas = 1;
+  private Integer parcelas;
 }

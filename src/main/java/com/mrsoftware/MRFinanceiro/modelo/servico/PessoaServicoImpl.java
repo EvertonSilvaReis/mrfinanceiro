@@ -102,7 +102,6 @@ public class PessoaServicoImpl implements PessoaServico {
       Page<Pessoa> pessoas =
           pessoaRepositorio.retornarListaPessoasPaginadas(
               pessoaEntradaPaginadaDTO.getNome(), pessoaEntradaPaginadaDTO.getCpfCnpj(), paginacao);
-      log.info("Encontradas {} pessoas", pessoas.getTotalElements());
       List<PessoaRetornoDTO> pessoaRetornoDTOList = new ArrayList<>();
       pessoas
           .getContent()
@@ -141,13 +140,13 @@ public class PessoaServicoImpl implements PessoaServico {
 
   private Pessoa obterPessoaPorId(UUID id) {
     return pessoaRepositorio
-        .findById(id)
+        .findByIdAndDataExclusaoIsNull(id)
         .orElseThrow(() -> new NotFoundException(EValidacao.PESSOA_NAO_ENCONTRADA, id.toString()));
   }
 
   private void validaSePessoaJaCadastrada(PessoaEntradaDTO pessoaEntradaDTO) {
     Optional<Pessoa> pessoa =
-        pessoaRepositorio.findByNomeOrCpfCnpj(
+        pessoaRepositorio.findByNomeOrCpfCnpjAndDataExclusaoIsNull(
             pessoaEntradaDTO.getNome(), pessoaEntradaDTO.getCpfCnpj());
 
     if (pessoa.isPresent()) throw new BadRequestException(EValidacao.PESSOA_JA_CADASTRADA);

@@ -11,15 +11,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PessoaRepositorio extends JpaRepository<Pessoa, UUID> {
-  Optional<Pessoa> findByNomeOrCpfCnpj(String nome, String cpfCnpj);
+  Optional<Pessoa> findByNomeOrCpfCnpjAndDataExclusaoIsNull(String nome, String cpfCnpj);
 
   @Query(
       value =
           """
                     select * from pessoa p
                     where ( cast(?1 as text) is null or lower(p.nome) like concat('%',?1,'%')) and
-                    ( cast(?2 as text) is null or lower(p.cpf_cnpj) like concat('%',?2,'%'))
+                    ( cast(?2 as text) is null or lower(p.cpf_cnpj) like concat('%',?2,'%')) and
+                    p.data_exclusao is null
                     """,
       nativeQuery = true)
   Page<Pessoa> retornarListaPessoasPaginadas(String nome, String cpfCnpj, Pageable paginacao);
+
+  Optional<Pessoa> findByIdAndDataExclusaoIsNull(UUID id);
 }

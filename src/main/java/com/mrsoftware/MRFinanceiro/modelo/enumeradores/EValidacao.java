@@ -14,6 +14,8 @@ public enum EValidacao implements IEnumLabel<EValidacao> {
   UUID_INVALIDO(-7),
   PESSOA_NAO_ENCONTRADA(-8),
   PESSOA_JA_CADASTRADA(-9),
+  TIPO_PAGAMENTO_JA_CADASTRADO(-10),
+  TIPO_PAGAMENTO_NAO_ENCONTRADO(-11),
   NAO_IDENTIFICADO(-999);
 
   private Integer codigo;
