@@ -17,8 +17,8 @@ public interface PessoaRepositorio extends JpaRepository<Pessoa, UUID> {
       value =
           """
                     select * from pessoa p
-                    where ( cast(?1 as text) is null or lower(p.nome) like concat('%',?1,'%')) and
-                    ( cast(?2 as text) is null or lower(p.cpf_cnpj) like concat('%',?2,'%')) and
+                    where ( cast(?1 as text) is null or lower(p.nome) like concat('%',lower(?1),'%')) and
+                    ( cast(?2 as text) is null or lower(p.cpf_cnpj) like concat('%',lower(?2),'%')) and
                     p.data_exclusao is null
                     """,
       nativeQuery = true)
