@@ -38,6 +38,8 @@ public class Pessoa {
   @OneToMany(mappedBy = "pessoa")
   private List<Lancamento> lancamentos;
 
+  private Boolean ativo;
+
   @Column(name = "data_exclusao")
   private LocalDateTime dataExclusao;
 }

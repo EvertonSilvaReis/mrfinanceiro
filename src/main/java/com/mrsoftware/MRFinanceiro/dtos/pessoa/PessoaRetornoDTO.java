@@ -20,4 +20,5 @@ public class PessoaRetornoDTO {
   private Integer tipoPessoa;
   private LocalDate dataCadastro;
   private List<LancamentoRetornoDTO> lancamentos;
+  private Boolean ativo;
 }

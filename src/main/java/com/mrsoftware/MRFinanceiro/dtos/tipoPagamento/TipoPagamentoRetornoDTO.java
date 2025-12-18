@@ -13,4 +13,5 @@ public class TipoPagamentoRetornoDTO {
   private String descricao;
   private Boolean parcelado;
   private Integer parcelas;
+  private Boolean ativo;
 }

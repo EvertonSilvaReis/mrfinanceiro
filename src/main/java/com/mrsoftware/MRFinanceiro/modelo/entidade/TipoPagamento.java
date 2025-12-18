@@ -25,6 +25,8 @@ public class TipoPagamento {
   @Column(name = "numero_parcela")
   private Integer parcelas;
 
+  private Boolean ativo;
+
   @Column(name = "data_exclusao")
   private LocalDateTime dataExclusao;
 }

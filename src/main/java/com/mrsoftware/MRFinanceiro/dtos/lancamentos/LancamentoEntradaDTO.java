@@ -1,26 +1,39 @@
 package com.mrsoftware.MRFinanceiro.dtos.lancamentos;
 
-import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaEntradaDTO;
-import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoEntradaDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class LancamentoEntradaDTO {
-  private String descricao;
-  private Integer codigo;
+  @NotBlank private String descricao;
+
   private String numeroDocumento;
-  private Integer tipoLancamento;
-  private BigDecimal valorTitulo;
+
+  @NotNull private Integer tipoLancamento;
+
+  @NotNull private BigDecimal valorTitulo;
+
   private BigDecimal desconto;
-  private String dataEmissao;
-  private String dataVencimento;
+
+  @NotBlank private String dataEmissao;
+
+  @NotBlank private String dataVencimento;
+
   private BigDecimal valorPagamento;
   private String dataPagamento;
   private String observacao;
-  private TipoPagamentoEntradaDTO tipoPagamento;
+
+  @NotNull @Valid private UUID tipoPagamento;
+
   private Integer parcela;
-  private PessoaEntradaDTO pessoa;
+
+  @NotNull private UUID pessoa;
+
+  @NotNull private UUID conta;
 }
