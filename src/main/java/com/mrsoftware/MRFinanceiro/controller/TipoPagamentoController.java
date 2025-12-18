@@ -36,7 +36,7 @@ public class TipoPagamentoController {
 
   @GetMapping("id/{id}")
   public ResponseEntity<TipoPagamentoRetornoDTO> retornarPorId(@PathVariable String id) {
-    return new ResponseEntity<>(tipoPagamentoServico.retornarPessoaPorId(id), HttpStatus.OK);
+    return new ResponseEntity<>(tipoPagamentoServico.retornarTipoPagamentoPorId(id), HttpStatus.OK);
   }
 
   @GetMapping("/filtro")

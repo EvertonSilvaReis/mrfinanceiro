@@ -4,8 +4,10 @@ import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoEntradaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoEntradaPaginadaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoRetornoPaginadoDTO;
+import com.mrsoftware.MRFinanceiro.exception.BadRequestException;
 import com.mrsoftware.MRFinanceiro.exception.ExceptionAbstractImpl;
 import com.mrsoftware.MRFinanceiro.exception.InternalServerErrorException;
+import com.mrsoftware.MRFinanceiro.exception.NotFoundException;
 import com.mrsoftware.MRFinanceiro.modelo.builder.TipoPagamentoBuilder;
 import com.mrsoftware.MRFinanceiro.modelo.entidade.TipoPagamento;
 import com.mrsoftware.MRFinanceiro.modelo.enumeradores.EValidacao;
@@ -76,7 +78,7 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
   }
 
   @Override
-  public TipoPagamentoRetornoDTO retornarPessoaPorId(String id) {
+  public TipoPagamentoRetornoDTO retornarTipoPagamentoPorId(String id) {
     try {
       return new TipoPagamentoBuilder()
           .addTipoPagamento(obterTipoPagamentoPorId(IdUtil.obterUUID(id)))
@@ -142,7 +144,7 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
         .findByDescricaoAndDataExclusaoIsNull(tipoPagamentoEntradaDTO.getDescricao())
         .ifPresent(
             tipoPagamento -> {
-              throw new ExceptionAbstractImpl(EValidacao.TIPO_PAGAMENTO_JA_CADASTRADO);
+              throw new BadRequestException(EValidacao.TIPO_PAGAMENTO_JA_CADASTRADO);
             });
   }
 
@@ -154,6 +156,6 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
   private TipoPagamento obterTipoPagamentoPorId(UUID uuid) {
     return tipoPagamentoRepositorio
         .findByIdAndDataExclusaoIsNull(uuid)
-        .orElseThrow(() -> new ExceptionAbstractImpl(EValidacao.TIPO_PAGAMENTO_NAO_ENCONTRADO));
+        .orElseThrow(() -> new NotFoundException(EValidacao.TIPO_PAGAMENTO_NAO_ENCONTRADO));
   }
 }

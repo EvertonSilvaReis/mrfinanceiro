@@ -10,7 +10,7 @@ public interface TipoPagamentoServico {
 
   TipoPagamentoRetornoDTO atualizar(String id, TipoPagamentoEntradaDTO pessoaEntradaDTO);
 
-  TipoPagamentoRetornoDTO retornarPessoaPorId(String id);
+  TipoPagamentoRetornoDTO retornarTipoPagamentoPorId(String id);
 
   TipoPagamentoRetornoPaginadoDTO retornarPorFiltro(
       TipoPagamentoEntradaPaginadaDTO pessoaEntradaPaginadaDTO);
