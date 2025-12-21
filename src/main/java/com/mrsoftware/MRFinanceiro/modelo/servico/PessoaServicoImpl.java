@@ -138,7 +138,7 @@ public class PessoaServicoImpl implements PessoaServico {
     pessoa.setCodigo(String.format("%06d", codigo));
   }
 
-  private Pessoa obterPessoaPorId(UUID id) {
+  public Pessoa obterPessoaPorId(UUID id) {
     return pessoaRepositorio
         .findByIdAndDataExclusaoIsNull(id)
         .orElseThrow(() -> new NotFoundException(EValidacao.PESSOA_NAO_ENCONTRADA, id.toString()));

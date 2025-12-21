@@ -1,14 +1,17 @@
 package com.mrsoftware.MRFinanceiro.dtos.lancamentos;
 
+import com.mrsoftware.MRFinanceiro.dtos.conta.ContaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoRetornoDTO;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@Builder
 @Getter
 @Setter
 public class LancamentoRetornoDTO {
@@ -28,4 +31,5 @@ public class LancamentoRetornoDTO {
   private TipoPagamentoRetornoDTO tipoPagamento;
   private Integer parcela;
   private PessoaRetornoDTO pessoa;
+  private ContaRetornoDTO conta;
 }

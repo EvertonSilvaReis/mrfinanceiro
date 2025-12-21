@@ -13,7 +13,7 @@ import lombok.Setter;
 public class LancamentoEntradaDTO {
   @NotBlank private String descricao;
 
-  private String numeroDocumento;
+  @NotBlank private String numeroDocumento;
 
   @NotNull private Integer tipoLancamento;
 
@@ -30,8 +30,6 @@ public class LancamentoEntradaDTO {
   private String observacao;
 
   @NotNull @Valid private UUID tipoPagamento;
-
-  private Integer parcela;
 
   @NotNull private UUID pessoa;
 

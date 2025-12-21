@@ -1,15 +1,14 @@
 package com.mrsoftware.MRFinanceiro.modelo.entidade;
 
+import com.mrsoftware.MRFinanceiro.modelo.enumeradores.ETipoConta;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,6 +27,8 @@ public class Conta {
 
   private Integer agencia;
 
+  private Integer banco;
+
   @Column(name = "saldo_inicial")
   private BigDecimal saldoInicial;
 
@@ -38,6 +39,9 @@ public class Conta {
   private List<Lancamento> lancamentos;
 
   private Boolean ativo;
+
+  @Enumerated(EnumType.ORDINAL)
+  private ETipoConta tipoConta;
 
   @Column(name = "data_exclusao")
   private LocalDateTime dataExclusao;

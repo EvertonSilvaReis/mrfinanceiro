@@ -16,6 +16,8 @@ public enum EValidacao implements IEnumLabel<EValidacao> {
   PESSOA_JA_CADASTRADA(-9),
   TIPO_PAGAMENTO_JA_CADASTRADO(-10),
   TIPO_PAGAMENTO_NAO_ENCONTRADO(-11),
+  CONTA_JA_CADASTRADA(-12),
+  TIPO_CONTA_NAO_ENCONTRADO(-13),
   NAO_IDENTIFICADO(-999);
 
   private Integer codigo;

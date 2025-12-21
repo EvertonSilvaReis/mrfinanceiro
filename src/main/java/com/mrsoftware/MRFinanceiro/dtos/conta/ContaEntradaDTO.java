@@ -10,6 +10,7 @@ public class ContaEntradaDTO {
   private String descricao;
   private Integer numeroConta;
   private Integer agencia;
+  private Integer banco;
   private BigDecimal saldoInicial;
   private BigDecimal saldoAtual;
 }

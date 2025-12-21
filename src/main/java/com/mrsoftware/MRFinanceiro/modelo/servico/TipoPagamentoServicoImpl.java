@@ -153,7 +153,7 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
     tipoPagamento.setCodigo(String.format("%06d", codigo));
   }
 
-  private TipoPagamento obterTipoPagamentoPorId(UUID uuid) {
+  public TipoPagamento obterTipoPagamentoPorId(UUID uuid) {
     return tipoPagamentoRepositorio
         .findByIdAndDataExclusaoIsNull(uuid)
         .orElseThrow(() -> new NotFoundException(EValidacao.TIPO_PAGAMENTO_NAO_ENCONTRADO));

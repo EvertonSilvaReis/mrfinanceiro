@@ -1,0 +1,2 @@
+ALTER TABLE conta ADD COLUMN IF NOT EXISTS banco bigint;
+ALTER TABLE conta ADD COLUMN IF NOT EXISTS tipo_conta bigint;

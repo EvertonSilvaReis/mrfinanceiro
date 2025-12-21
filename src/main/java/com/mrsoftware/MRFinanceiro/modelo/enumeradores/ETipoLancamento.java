@@ -17,7 +17,7 @@ public enum ETipoLancamento {
     this.codigo = codigo;
   }
 
-  private ETipoLancamento obterETipoLancamento(Object tipo) {
+  public static ETipoLancamento obterETipoLancamento(Object tipo) {
     if (Objects.isNull(tipo)) return null;
 
     for (ETipoLancamento tipoLancamento : ETipoLancamento.values()) {
