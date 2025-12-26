@@ -16,9 +16,9 @@ public interface TipoPagamentoRepositorio extends JpaRepository<TipoPagamento, U
   @Query(
       value =
           """
-              select * from tipoPagamento t
-              where ( cast(?1 as text) is null or lower(t.nome) like concat('%', lower(?1),'%')) and
-              t.data_exclusao is null
+              select * from tipo_pagamento tp
+              where ( cast(?1 as text) is null or lower(tp.descricao) like concat('%', lower(?1),'%')) and
+              tp.data_exclusao is null
               """,
       nativeQuery = true)
   Page<TipoPagamento> retornarListaTiposPagamentoPaginados(String descricao, Pageable paginacao);

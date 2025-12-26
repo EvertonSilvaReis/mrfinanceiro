@@ -124,7 +124,7 @@ public class ContaServicoImpl implements ContaServico {
   @Override
   public Conta obterContaPorId(UUID id) {
     return contaRepositorio
-        .findByIdAndDataExclusaoIsFalse(id)
+        .findByIdAndDataExclusaoIsNull(id)
         .orElseThrow(() -> new NotFoundException(EValidacao.NAO_IDENTIFICADO));
   }
 

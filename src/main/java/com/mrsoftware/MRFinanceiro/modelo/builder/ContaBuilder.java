@@ -42,6 +42,7 @@ public class ContaBuilder {
         .banco(conta.getBanco())
         .saldoInicial(conta.getSaldoInicial())
         .saldoAtual(conta.getSaldoAtual())
+        .ativo(conta.getAtivo())
         .build();
   }
 

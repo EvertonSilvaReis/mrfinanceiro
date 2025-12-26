@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContaRepositorio extends JpaRepository<Conta, UUID> {
 
-  Optional<Conta> findByIdAndDataExclusaoIsFalse(UUID id);
+  Optional<Conta> findByIdAndDataExclusaoIsNull(UUID id);
 
   boolean existsByAgenciaAndNumeroContaAndBanco(
       Integer agencia, Integer numeroConta, Integer banco);
@@ -20,11 +20,11 @@ public interface ContaRepositorio extends JpaRepository<Conta, UUID> {
   @Query(
       value =
           """
-                              select * from conta c
-                              where ( cast(?1 as text) is null or lower(c.descricao) like concat('%',lower(?1),'%')) and
-                              ( cast(?2 as text) is null or lower(c.banco) like concat('%',lower(?2),'%')) and
-                              p.data_exclusao is null
-                              """,
+              select * from conta c
+              where ( cast(?1 as text) is null or lower(c.descricao) like concat('%',lower(?1),'%')) and
+              ( cast(?2 as text) is null or cast(c.banco as text) like concat('%',?2,'%')) and
+              c.data_exclusao is null
+              """,
       nativeQuery = true)
-  Page<Conta> retornarListaContasPaginadas(String descricao, String banco, Pageable paginacao);
+  Page<Conta> retornarListaContasPaginadas(String descricao, Integer banco, Pageable paginacao);
 }

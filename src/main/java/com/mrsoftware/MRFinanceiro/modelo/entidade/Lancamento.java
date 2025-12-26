@@ -68,6 +68,9 @@ public class Lancamento {
   @Column(name = "data_exclusao")
   private LocalDateTime dataExclusao;
 
+  @Column(name = "lancamento_original")
+  private UUID lancamentoOriginal;
+
   @ManyToOne
   @JoinColumn(name = "id_conta")
   private Conta conta;

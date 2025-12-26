@@ -17,7 +17,7 @@ import lombok.Setter;
 public class LancamentoRetornoDTO {
   private UUID id;
   private String descricao;
-  private Integer codigo;
+  private String codigo;
   private String numeroDocumento;
   private String tipoLancamento;
   private BigDecimal valorTitulo;

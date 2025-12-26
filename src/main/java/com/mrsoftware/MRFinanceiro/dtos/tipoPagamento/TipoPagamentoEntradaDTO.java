@@ -1,6 +1,7 @@
 package com.mrsoftware.MRFinanceiro.dtos.tipoPagamento;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class TipoPagamentoEntradaDTO {
   @NotBlank private String descricao;
-  @NotBlank private Boolean parcelado;
+  @NotNull private Boolean parcelado;
   private Integer parcelas;
 }

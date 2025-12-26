@@ -31,6 +31,7 @@ public class TipoPagamentoBuilder {
                     && Objects.nonNull(tipoPagamentoEntradaDTO.getParcelas())
                 ? tipoPagamentoEntradaDTO.getParcelas()
                 : 1)
+        .ativo(true)
         .build();
   }
 
@@ -40,6 +41,7 @@ public class TipoPagamentoBuilder {
         .descricao(tipoPagamento.getDescricao())
         .parcelado(tipoPagamento.getParcelado())
         .parcelas(tipoPagamento.getParcelas())
+        .ativo(tipoPagamento.getAtivo())
         .build();
   }
 

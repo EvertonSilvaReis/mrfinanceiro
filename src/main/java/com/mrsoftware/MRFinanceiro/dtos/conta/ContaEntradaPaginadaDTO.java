@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class ContaEntradaPaginadaDTO extends PaginacaoFiltroDTO {
   private String descricao;
-  private String banco;
+  private Integer banco;
 }
