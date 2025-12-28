@@ -46,7 +46,7 @@ public class PessoaServicoTest {
 
     when(pessoaRepositorio.findByNomeOrCpfCnpjAndDataExclusaoIsNull(anyString(), anyString()))
         .thenReturn(Optional.empty());
-    when(configuracaoServico.obterUltimoCodigo("ultimo-codigo-pessoa")).thenReturn(0);
+    when(configuracaoServico.obterCodigo("ultimo-codigo-pessoa")).thenReturn(0);
     when(pessoaRepositorio.save(any(Pessoa.class))).thenReturn(pessoaSalva);
 
     PessoaRetornoDTO resultado = pessoaServico.cadastrar(entrada);

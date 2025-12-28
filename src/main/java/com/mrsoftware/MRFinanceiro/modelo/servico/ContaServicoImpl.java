@@ -12,6 +12,7 @@ import com.mrsoftware.MRFinanceiro.modelo.enumeradores.EValidacao;
 import com.mrsoftware.MRFinanceiro.modelo.repositorios.ContaRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ContaServico;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ContaServicoImpl implements ContaServico {
 
   private static final String MENSAGEM_ERRO = "Ocorreu um erro ao {} conta.";
 
+  @Transactional
   @Override
   public ContaRetornoDTO cadastrar(ContaEntradaDTO contaEntradaDTO) {
     try {

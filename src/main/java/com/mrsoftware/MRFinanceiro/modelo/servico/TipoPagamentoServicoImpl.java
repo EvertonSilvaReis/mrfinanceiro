@@ -15,6 +15,7 @@ import com.mrsoftware.MRFinanceiro.modelo.repositorios.TipoPagamentoRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ConfiguracaoServico;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.TipoPagamentoServico;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
   private static final String MENSAGEM_ERRO = "Erro ao {} tipo de pagamento: {}";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-tipo-pagamento";
 
+  @Transactional
   @Override
   public TipoPagamentoRetornoDTO cadastrar(TipoPagamentoEntradaDTO tipoPagamentoEntradaDTO) {
     try {
@@ -149,8 +151,7 @@ public class TipoPagamentoServicoImpl implements TipoPagamentoServico {
   }
 
   private void adicionaCodigoTipoPagamento(TipoPagamento tipoPagamento) {
-    int codigo = configuracaoServico.obterUltimoCodigo(ULTIMO_CODIGO) + 1;
-    tipoPagamento.setCodigo(String.format("%06d", codigo));
+    tipoPagamento.setCodigo(String.format("%06d", configuracaoServico.obterCodigo(ULTIMO_CODIGO)));
   }
 
   public TipoPagamento obterTipoPagamentoPorId(UUID uuid) {

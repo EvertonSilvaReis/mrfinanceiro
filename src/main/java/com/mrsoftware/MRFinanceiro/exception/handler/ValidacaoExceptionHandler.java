@@ -3,6 +3,7 @@ package com.mrsoftware.MRFinanceiro.exception.handler;
 import com.mrsoftware.MRFinanceiro.dtos.erros.ErroDTO;
 import com.mrsoftware.MRFinanceiro.dtos.erros.ErrosDTO;
 import com.mrsoftware.MRFinanceiro.exception.BadRequestException;
+import com.mrsoftware.MRFinanceiro.exception.ForbiddenException;
 import com.mrsoftware.MRFinanceiro.exception.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +33,14 @@ public class ValidacaoExceptionHandler {
 
     log.error(ex.getMensagem());
     return new ResponseEntity<>(new ErrosDTO(erros), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  public ResponseEntity<?> handlerForbiddenException(ForbiddenException ex) {
+    List<ErroDTO> erros = new ArrayList<>();
+    erros.add(new ErroDTO(ex.codigo(), ex.getMensagem()));
+
+    log.error(ex.getMensagem());
+    return new ResponseEntity<>(new ErrosDTO(erros), HttpStatus.FORBIDDEN);
   }
 }

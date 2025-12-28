@@ -17,6 +17,7 @@ import com.mrsoftware.MRFinanceiro.modelo.enumeradores.EValidacao;
 import com.mrsoftware.MRFinanceiro.modelo.repositorios.LancamentoRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.*;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -37,6 +38,7 @@ public class LancamentoServicoImpl implements LancamentoServico {
   private static final String MENSAGEM_ERRO = "Ocorreu um erro ao {} lancamento.";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-lancamento";
 
+  @Transactional
   @Override
   public LancamentoRetornoDTO cadastrar(LancamentoEntradaDTO lancamentoEntradaDTO) {
     try {
@@ -177,7 +179,6 @@ public class LancamentoServicoImpl implements LancamentoServico {
   }
 
   private void adicionaCodigoLancamento(Lancamento lancamento) {
-    int codigo = configuracaoServico.obterUltimoCodigo(ULTIMO_CODIGO) + 1;
-    lancamento.setCodigo(String.format("%06d", codigo));
+    lancamento.setCodigo(String.format("%06d", configuracaoServico.obterCodigo(ULTIMO_CODIGO)));
   }
 }

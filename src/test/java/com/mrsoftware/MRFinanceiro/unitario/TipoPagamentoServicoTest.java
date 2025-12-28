@@ -32,7 +32,7 @@ public class TipoPagamentoServicoTest {
 
     when(tipoPagamentoRepositorio.findByDescricaoAndDataExclusaoIsNull(anyString()))
         .thenReturn(Optional.empty());
-    when(configuracaoServico.obterUltimoCodigo("ultimo-codigo-tipo-pagamento")).thenReturn(0);
+    when(configuracaoServico.obterCodigo("ultimo-codigo-tipo-pagamento")).thenReturn(0);
     when(tipoPagamentoRepositorio.save(any(TipoPagamento.class))).thenReturn(tipoPagamentoSalvo);
 
     TipoPagamentoRetornoDTO resultado = tipoPagamentoServico.cadastrar(entrada);

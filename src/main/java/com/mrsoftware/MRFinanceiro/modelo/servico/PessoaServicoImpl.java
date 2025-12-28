@@ -15,6 +15,7 @@ import com.mrsoftware.MRFinanceiro.modelo.repositorios.PessoaRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ConfiguracaoServico;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.PessoaServico;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class PessoaServicoImpl implements PessoaServico {
   private static final String MENSAGEM_ERRO = "Ocorreu um erro ao {} pessoa.";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-pessoa";
 
+  @Transactional
   @Override
   public PessoaRetornoDTO cadastrar(PessoaEntradaDTO pessoaEntradaDTO) {
     try {
@@ -134,8 +136,7 @@ public class PessoaServicoImpl implements PessoaServico {
   }
 
   private void adicionaCodigoPessoa(Pessoa pessoa) {
-    int codigo = configuracaoServico.obterUltimoCodigo(ULTIMO_CODIGO) + 1;
-    pessoa.setCodigo(String.format("%06d", codigo));
+    pessoa.setCodigo(String.format("%06d", configuracaoServico.obterCodigo(ULTIMO_CODIGO)));
   }
 
   public Pessoa obterPessoaPorId(UUID id) {
