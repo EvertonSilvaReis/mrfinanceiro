@@ -1,0 +1,1 @@
+ALTER TABLE lancamento ADD COLUMN IF NOT EXISTS valor_documento decimal;

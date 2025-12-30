@@ -11,12 +11,15 @@ import com.mrsoftware.MRFinanceiro.modelo.enumeradores.EStatusTitulo;
 import com.mrsoftware.MRFinanceiro.modelo.enumeradores.ETipoLancamento;
 import com.mrsoftware.MRFinanceiro.util.DataUtil;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LancamentoBuilder {
   private LancamentoEntradaDTO lancamentoEntradaDTO;
+  private List<Lancamento> lancamentos;
   private Lancamento lancamento;
   private TipoPagamento tipoPagamento;
   private Pessoa pessoa;
@@ -29,6 +32,11 @@ public class LancamentoBuilder {
 
   public LancamentoBuilder addLancamentoEntrada(LancamentoEntradaDTO lancamentoEntradaDTO) {
     this.lancamentoEntradaDTO = lancamentoEntradaDTO;
+    return this;
+  }
+
+  public LancamentoBuilder addLancamento(List<Lancamento> lancamentos) {
+    this.lancamentos = lancamentos;
     return this;
   }
 
@@ -61,7 +69,6 @@ public class LancamentoBuilder {
     DataUtil.converterStringParaLocalDate(lancamentoEntradaDTO.getDataPagamento());
     return Lancamento.builder()
         .descricao(lancamentoEntradaDTO.getDescricao())
-        .numeroDocumento(lancamentoEntradaDTO.getNumeroDocumento())
         .tipoLancamento(
             ETipoLancamento.obterETipoLancamento(lancamentoEntradaDTO.getTipoLancamento()))
         .valorTitulo(lancamentoEntradaDTO.getValorTitulo())
@@ -80,11 +87,41 @@ public class LancamentoBuilder {
         .pessoa(pessoa)
         .conta(conta)
         .situacao(EStatusTitulo.EM_ABERTO)
-        .parcela(
-            tipoPagamento
-                .getParcelas()) // TODO deverá haver mais uma coluna para parcela atual, e deverá
-        // ser criado futuramente um titulo para cada parcela
         .build();
+  }
+
+  public List<LancamentoRetornoDTO> buildEntidadeParaDtoCadastro() {
+    List<LancamentoRetornoDTO> lancamentoRetornoDTOS = new ArrayList<>();
+    lancamentos.forEach(
+        lancamento -> {
+          lancamentoRetornoDTOS.add(
+              LancamentoRetornoDTO.builder()
+                  .id(lancamento.getId())
+                  .descricao(lancamento.getDescricao())
+                  .numeroDocumento(lancamento.getNumeroDocumento())
+                  .tipoLancamento(lancamento.getTipoLancamento().getDescricao())
+                  .valorTitulo(lancamento.getValorTitulo())
+                  .desconto(lancamento.getDesconto())
+                  .dataEmissao(lancamento.getDataEmissao())
+                  .dataVencimento(lancamento.getDataVencimento())
+                  .valorPagamento(lancamento.getValorPagamento())
+                  .dataPagamento(lancamento.getDataPagamento())
+                  .observacao(lancamento.getObservacao())
+                  .tipoPagamento(
+                      new TipoPagamentoBuilder()
+                          .addTipoPagamento(lancamento.getTipoPagamento())
+                          .buildRetornoTipoPagamento())
+                  .pessoa(
+                      new PessoaBuilder()
+                          .addPessoa(lancamento.getPessoa())
+                          .buildPessoaParaPessoaRetorno())
+                  .conta(new ContaBuilder().addConta(lancamento.getConta()).buildEntidadeParaDto())
+                  .situacao(lancamento.getSituacao().getDescricao())
+                  .codigo(lancamento.getCodigo())
+                  .build());
+        });
+
+    return lancamentoRetornoDTOS;
   }
 
   public LancamentoRetornoDTO buildEntidadeParaDto() {

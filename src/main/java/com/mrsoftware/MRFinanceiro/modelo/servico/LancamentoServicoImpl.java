@@ -20,6 +20,8 @@ import com.mrsoftware.MRFinanceiro.util.IdUtil;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,24 +42,17 @@ public class LancamentoServicoImpl implements LancamentoServico {
 
   @Transactional
   @Override
-  public LancamentoRetornoDTO cadastrar(LancamentoEntradaDTO lancamentoEntradaDTO) {
+  public List<LancamentoRetornoDTO> cadastrar(LancamentoEntradaDTO lancamentoEntradaDTO) {
     try {
       Pessoa pessoa = pessoaServico.obterPessoaPorId(lancamentoEntradaDTO.getPessoa());
       TipoPagamento tipoPagamento =
           tipoPagamentoServico.obterTipoPagamentoPorId(lancamentoEntradaDTO.getTipoPagamento());
       Conta conta = contaServico.obterContaPorId(lancamentoEntradaDTO.getConta());
-      Lancamento lancamento =
-          new LancamentoBuilder()
-              .addLancamentoEntrada(lancamentoEntradaDTO)
-              .addPessoa(pessoa)
-              .addTipoPagamento(tipoPagamento)
-              .addConta(conta)
-              .buildDtoParaEntidade();
-      adicionaCodigoLancamento(lancamento);
 
-      return new LancamentoBuilder()
-          .addLancamento(lancamentoRepositorio.save(lancamento))
-          .buildEntidadeParaDto();
+      List<Lancamento> lancamentos =
+          gerarLancamentos(lancamentoEntradaDTO, pessoa, tipoPagamento, conta);
+
+      return new LancamentoBuilder().addLancamento(lancamentos).buildEntidadeParaDtoCadastro();
     } catch (ExceptionAbstractImpl ex) {
       throw ex;
     } catch (Exception e) {
@@ -147,6 +142,33 @@ public class LancamentoServicoImpl implements LancamentoServico {
     }
   }
 
+  private List<Lancamento> gerarLancamentos(
+      LancamentoEntradaDTO lancamentoEntradaDTO,
+      Pessoa pessoa,
+      TipoPagamento tipoPagamento,
+      Conta conta) {
+    List<Lancamento> lancamentos = new ArrayList<>();
+
+    for (int i = 1; i <= tipoPagamento.getParcelas(); i++) {
+      Lancamento lancamento =
+          new LancamentoBuilder()
+              .addLancamentoEntrada(lancamentoEntradaDTO)
+              .addPessoa(pessoa)
+              .addTipoPagamento(tipoPagamento)
+              .addConta(conta)
+              .buildDtoParaEntidade();
+      lancamento.setParcela(i);
+      lancamento.setNumeroDocumento(lancamentoEntradaDTO.getNumeroDocumento() + "/" + i);
+      lancamento.setValorDocumento(
+          lancamentoEntradaDTO
+              .getValorTitulo()
+              .divide(BigDecimal.valueOf(tipoPagamento.getParcelas())));
+      adicionaCodigoLancamento(lancamento);
+      lancamentos.add(lancamento);
+    }
+    return lancamentoRepositorio.saveAll(lancamentos);
+  }
+
   private boolean validaSeTituloBaixadoIntegralmente(
       Lancamento lancamento, LancamentoBaixaDTO lancamentoBaixaDTO) {
     if (lancamento.getValorPagamento().compareTo(lancamentoBaixaDTO.getValorPagamento()) != 0) {
@@ -179,6 +201,7 @@ public class LancamentoServicoImpl implements LancamentoServico {
   }
 
   private void adicionaCodigoLancamento(Lancamento lancamento) {
-    lancamento.setCodigo(String.format("%06d", configuracaoServico.obterCodigo(ULTIMO_CODIGO)));
+    String codigo = String.format("%06d", configuracaoServico.obterCodigo(ULTIMO_CODIGO));
+    lancamento.setCodigo(codigo);
   }
 }

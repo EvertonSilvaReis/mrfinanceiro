@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LancamentoRepositorio extends JpaRepository<Lancamento, UUID> {
   Optional<Lancamento> findByIdAndDataExclusaoIsNull(UUID uuid);
+
+  Optional<Lancamento> findByNumeroDocumentoAndDataExclusaoIsNull(String numeroDocumento);
 }

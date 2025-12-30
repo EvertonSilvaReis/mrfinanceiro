@@ -36,6 +36,9 @@ public class Lancamento {
   @Column(name = "valor_titulo")
   private BigDecimal valorTitulo;
 
+  @Column(name = "valor_documento")
+  private BigDecimal valorDocumento;
+
   private BigDecimal desconto;
 
   @Column(name = "data_emissao")

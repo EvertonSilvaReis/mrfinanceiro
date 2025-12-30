@@ -4,6 +4,7 @@ import com.mrsoftware.MRFinanceiro.dtos.lancamentos.LancamentoBaixaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.lancamentos.LancamentoEntradaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.lancamentos.LancamentoRetornoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.LancamentoServico;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class LancamentoController {
   @Autowired private LancamentoServico lancamentoServico;
 
   @PostMapping
-  public ResponseEntity<LancamentoRetornoDTO> cadastrar(
+  public ResponseEntity<List<LancamentoRetornoDTO>> cadastrar(
       @RequestBody LancamentoEntradaDTO lancamentoEntradaDTO) {
     return new ResponseEntity<>(
         lancamentoServico.cadastrar(lancamentoEntradaDTO), HttpStatus.CREATED);
