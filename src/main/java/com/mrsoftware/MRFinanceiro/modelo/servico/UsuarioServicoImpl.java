@@ -6,13 +6,19 @@ import com.mrsoftware.MRFinanceiro.exception.BadRequestException;
 import com.mrsoftware.MRFinanceiro.exception.ExceptionAbstractImpl;
 import com.mrsoftware.MRFinanceiro.exception.InternalServerErrorException;
 import com.mrsoftware.MRFinanceiro.modelo.builder.UsuarioBuilder;
+import com.mrsoftware.MRFinanceiro.modelo.builder.UsuarioPerfilBuilder;
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Usuario;
+import com.mrsoftware.MRFinanceiro.modelo.entidade.UsuarioPerfil;
 import com.mrsoftware.MRFinanceiro.modelo.enumeradores.EValidacao;
+import com.mrsoftware.MRFinanceiro.modelo.repositorios.UsuarioPerfilRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.repositorios.UsuarioRepositorio;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ConfiguracaoServico;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.UsuarioServico;
+import com.mrsoftware.MRFinanceiro.util.IdUtil;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioServicoImpl implements UsuarioServico {
 
   @Autowired private UsuarioRepositorio usuarioRepositorio;
+  @Autowired private UsuarioPerfilRepositorio usuarioPerfilRepositorio;
   @Autowired private ConfiguracaoServico configuracaoServico;
   @Autowired private PasswordEncoder passwordEncoder;
 
@@ -38,8 +45,16 @@ public class UsuarioServicoImpl implements UsuarioServico {
           new UsuarioBuilder().addUsuarioEntradaDTO(usuarioEntradaDTO).buildCadastrarUsuario();
       usuario.setSenha(passwordEncoder.encode(usuarioEntradaDTO.getSenha()));
       adicionaCodigoUsuario(usuario);
+      usuario = usuarioRepositorio.save(usuario);
+      UsuarioPerfil usuarioPerfil =
+          usuarioPerfilRepositorio.save(
+              new UsuarioPerfilBuilder()
+                  .addUsuario(usuario)
+                  .addUsuarioEntradaDTO(usuarioEntradaDTO)
+                  .addUsuarioPerfil());
       return new UsuarioBuilder()
-          .addUsuario(usuarioRepositorio.save(usuario))
+          .addUsuario(usuario)
+          .addUsuarioPerfil(usuarioPerfil)
           .buildEntidadeParaRetorno();
     } catch (ExceptionAbstractImpl e) {
       throw e;
@@ -49,11 +64,30 @@ public class UsuarioServicoImpl implements UsuarioServico {
     }
   }
 
-  public Usuario obterUsuarioPorEmail(String email) {
-    return usuarioRepositorio
-        .findByEmail(email)
-        .orElseThrow(
-            () -> new InternalServerErrorException(EValidacao.USUARIO_NAO_ENCONTRADO, email));
+  @Override
+  public Optional<Usuario> obterUsuarioPorEmail(String email) {
+    return usuarioRepositorio.findByEmailWithPerfis(email);
+  }
+
+  public UsuarioRetornoDTO adicionarPerfilEmUsuario(String idUsuario, Integer perfil) {
+    try {
+      Usuario usuario = obterUsuarioPorId(IdUtil.obterUUID(idUsuario));
+      UsuarioPerfil usuarioPerfil =
+          usuarioPerfilRepositorio.save(
+              new UsuarioPerfilBuilder()
+                  .addUsuario(usuario)
+                  .addUsuarioEntradaDTO(UsuarioEntradaDTO.builder().tipoUsuario(perfil).build())
+                  .addUsuarioPerfil());
+      return new UsuarioBuilder()
+          .addUsuario(usuario)
+          .addUsuarioPerfil(usuarioPerfil)
+          .buildEntidadeParaRetorno();
+    } catch (ExceptionAbstractImpl e) {
+      throw e;
+    } catch (Exception e) {
+      log.error(MENSAGEM_ERRO, "adicionar perfil", e);
+      throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
+    }
   }
 
   private void adicionaCodigoUsuario(Usuario usuario) {
@@ -62,10 +96,17 @@ public class UsuarioServicoImpl implements UsuarioServico {
 
   private void validarSeUsuarioJaExiste(@NotBlank String email) {
     usuarioRepositorio
-        .findByEmail(email)
+        .findByEmailWithPerfis(email)
         .ifPresent(
             usuario -> {
               throw new BadRequestException(EValidacao.USUARIO_JA_CADASTRADO, email);
             });
+  }
+
+  private Usuario obterUsuarioPorId(UUID id) {
+    return usuarioRepositorio
+        .findById(id)
+        .orElseThrow(
+            () -> new BadRequestException(EValidacao.USUARIO_NAO_ENCONTRADO, id.toString()));
   }
 }

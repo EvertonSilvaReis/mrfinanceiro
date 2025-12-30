@@ -1,8 +1,8 @@
 package com.mrsoftware.MRFinanceiro.modelo.entidade;
 
-import com.mrsoftware.MRFinanceiro.modelo.enumeradores.ETipoUsuario;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 import lombok.*;
 
@@ -24,10 +24,9 @@ public class Usuario {
   private String email;
   private String senha;
 
-  @Enumerated(EnumType.ORDINAL)
-  @Column(name = "tipo_usuario")
-  private ETipoUsuario tipoUsuario;
-
   @Column(name = "data_exclusao")
   private LocalDateTime dataExclusao;
+
+  @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+  private Set<UsuarioPerfil> usuarioPerfis;
 }

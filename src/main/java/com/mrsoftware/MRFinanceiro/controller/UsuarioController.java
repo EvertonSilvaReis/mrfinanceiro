@@ -4,15 +4,12 @@ import com.mrsoftware.MRFinanceiro.dtos.usuario.UsuarioEntradaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.usuario.UsuarioRetornoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.UsuarioServico;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
@@ -22,9 +19,15 @@ public class UsuarioController {
   @Autowired private UsuarioServico usuarioServico;
 
   @PostMapping
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<UsuarioRetornoDTO> cadastrar(
       @RequestBody @Valid UsuarioEntradaDTO usuarioEntradaDTO) {
     return new ResponseEntity(usuarioServico.cadastrar(usuarioEntradaDTO), HttpStatus.CREATED);
+  }
+
+  @PutMapping("/incluir-perfil-usuario/id/{id}")
+  public ResponseEntity<UsuarioRetornoDTO> adicionarPerfilAoUsuario(
+      @PathVariable("id") String id, @RequestParam @NotNull Integer tipoUsuario) {
+    return new ResponseEntity(
+        usuarioServico.adicionarPerfilEmUsuario(id, tipoUsuario), HttpStatus.OK);
   }
 }
