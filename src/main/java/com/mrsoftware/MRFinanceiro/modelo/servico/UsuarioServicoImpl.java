@@ -19,19 +19,20 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UsuarioServicoImpl implements UsuarioServico {
 
-  @Autowired private UsuarioRepositorio usuarioRepositorio;
-  @Autowired private UsuarioPerfilRepositorio usuarioPerfilRepositorio;
-  @Autowired private ConfiguracaoServico configuracaoServico;
-  @Autowired private PasswordEncoder passwordEncoder;
+  private final UsuarioRepositorio usuarioRepositorio;
+  private final UsuarioPerfilRepositorio usuarioPerfilRepositorio;
+  private final ConfiguracaoServico configuracaoServico;
+  private final PasswordEncoder passwordEncoder;
 
   private static final String MENSAGEM_ERRO = "Erro ao {} usuário: {}";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-usuario";

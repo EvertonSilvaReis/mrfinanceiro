@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +30,11 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PessoaServicoImpl implements PessoaServico {
 
-  @Autowired private PessoaRepositorio pessoaRepositorio;
-  @Autowired private ConfiguracaoServico configuracaoServico;
+  private final PessoaRepositorio pessoaRepositorio;
+  private final ConfiguracaoServico configuracaoServico;
 
   private static final String MENSAGEM_ERRO = "Ocorreu um erro ao {} pessoa.";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-pessoa";

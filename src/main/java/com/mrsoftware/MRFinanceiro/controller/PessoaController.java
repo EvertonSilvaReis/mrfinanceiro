@@ -6,7 +6,7 @@ import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoPaginadoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.PessoaServico;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("pessoa")
+@RequiredArgsConstructor
 public class PessoaController {
 
-  @Autowired private PessoaServico pessoaServico;
+  private final PessoaServico pessoaServico;
 
   @PostMapping
   public ResponseEntity<PessoaRetornoDTO> cadastrar(

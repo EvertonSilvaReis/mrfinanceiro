@@ -6,7 +6,7 @@ import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.tipoPagamento.TipoPagamentoRetornoPaginadoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.TipoPagamentoServico;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("tipo-pagamento")
+@RequiredArgsConstructor
 public class TipoPagamentoController {
 
-  @Autowired private TipoPagamentoServico tipoPagamentoServico;
+  private final TipoPagamentoServico tipoPagamentoServico;
 
   @PostMapping
   public ResponseEntity<TipoPagamentoRetornoDTO> cadastrar(

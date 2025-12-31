@@ -23,19 +23,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LancamentoServicoImpl implements LancamentoServico {
 
-  @Autowired private LancamentoRepositorio lancamentoRepositorio;
-  @Autowired private PessoaServico pessoaServico;
-  @Autowired private TipoPagamentoServico tipoPagamentoServico;
-  @Autowired private ContaServico contaServico;
-  @Autowired private ConfiguracaoServico configuracaoServico;
+  private LancamentoRepositorio lancamentoRepositorio;
+  private PessoaServico pessoaServico;
+  private TipoPagamentoServico tipoPagamentoServico;
+  private ContaServico contaServico;
+  private ConfiguracaoServico configuracaoServico;
 
   private static final String MENSAGEM_ERRO = "Ocorreu um erro ao {} lancamento.";
   private static final String ULTIMO_CODIGO = "ultimo-codigo-lancamento";

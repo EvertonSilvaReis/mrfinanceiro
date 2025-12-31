@@ -1,8 +1,6 @@
 package com.mrsoftware.MRFinanceiro.seguranca;
 
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Usuario;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
@@ -10,13 +8,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Getter
 @RequiredArgsConstructor
 public class CustomAuthentication implements Authentication {
 
   private final Usuario usuario;
 
-  private final String ROLE = "ROLE_";
+  private static final String ROLE = "ROLE_";
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

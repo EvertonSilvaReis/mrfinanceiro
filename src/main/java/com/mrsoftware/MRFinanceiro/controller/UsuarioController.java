@@ -5,7 +5,7 @@ import com.mrsoftware.MRFinanceiro.dtos.usuario.UsuarioRetornoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.UsuarioServico;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("/usuario")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-  @Autowired private UsuarioServico usuarioServico;
+  private final UsuarioServico usuarioServico;
 
   @PostMapping
   public ResponseEntity<UsuarioRetornoDTO> cadastrar(

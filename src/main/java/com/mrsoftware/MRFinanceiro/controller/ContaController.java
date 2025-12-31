@@ -5,7 +5,7 @@ import com.mrsoftware.MRFinanceiro.dtos.conta.ContaEntradaPaginadaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.conta.ContaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.conta.ContaRetornoPaginadoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ContaServico;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("conta")
+@RequiredArgsConstructor
 public class ContaController {
 
-  @Autowired private ContaServico contaServico;
+  private final ContaServico contaServico;
 
   @PostMapping
   public ResponseEntity<ContaRetornoDTO> cadastrar(@RequestBody ContaEntradaDTO contaEntradaDTO) {

@@ -5,16 +5,17 @@ import com.mrsoftware.MRFinanceiro.dtos.lancamentos.LancamentoEntradaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.lancamentos.LancamentoRetornoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.LancamentoServico;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("lancamento")
+@RequiredArgsConstructor
 public class LancamentoController {
 
-  @Autowired private LancamentoServico lancamentoServico;
+  private final LancamentoServico lancamentoServico;
 
   @PostMapping
   public ResponseEntity<List<LancamentoRetornoDTO>> cadastrar(

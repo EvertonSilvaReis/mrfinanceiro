@@ -3,16 +3,17 @@ package com.mrsoftware.MRFinanceiro.util;
 import com.mrsoftware.MRFinanceiro.modelo.enumeradores.interfaces.IEnumLabel;
 import jakarta.annotation.PostConstruct;
 import java.util.Locale;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class MensagemUtils {
   private static MessageSource MESSAGE_SOURCE;
 
-  @Autowired private MessageSource resourceBundle;
+  private final MessageSource resourceBundle;
 
   /**
    * Cria uma referencia estatica ao title source, para que a internacionalizacao das enums possa
