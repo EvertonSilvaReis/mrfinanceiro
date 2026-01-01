@@ -30,12 +30,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     if (usuario.isPresent()) {
       boolean senhaUsuarioConfere = passwordEncoder.matches(senhaEntrada, usuario.get().getSenha());
 
-      if (senhaUsuarioConfere) {
-        return new CustomAuthentication(usuario.get());
+      if (!senhaUsuarioConfere) {
+        throw new NotFoundException(EValidacao.USUARIO_NAO_ENCONTRADO, email);
       }
+      return new CustomAuthentication(usuario.get());
+    } else {
+      throw new NotFoundException(EValidacao.USUARIO_NAO_ENCONTRADO, email);
     }
-
-    throw new NotFoundException(EValidacao.USUARIO_NAO_ENCONTRADO, email);
   }
 
   @Override

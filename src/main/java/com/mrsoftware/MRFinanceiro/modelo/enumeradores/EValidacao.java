@@ -23,6 +23,7 @@ public enum EValidacao implements IEnumLabel<EValidacao> {
   STATUS_NAO_ENCONTRADO(-16),
   USUARIO_NAO_ENCONTRADO(-17),
   USUARIO_JA_CADASTRADO(-18),
+  CLIENT_NAO_ENCONTRADO(-19),
   NAO_IDENTIFICADO(-999);
 
   private Integer codigo;

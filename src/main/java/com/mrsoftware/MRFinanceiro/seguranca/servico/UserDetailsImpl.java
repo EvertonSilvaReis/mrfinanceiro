@@ -1,22 +1,26 @@
-package com.mrsoftware.MRFinanceiro.seguranca;
+package com.mrsoftware.MRFinanceiro.seguranca.servico;
 
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Usuario;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
-import org.springframework.security.core.Authentication;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
-public class CustomAuthentication implements Authentication {
+public class UserDetailsImpl implements UserDetails {
 
-  private final Usuario usuario;
-
+  private Usuario usuario;
+  private String email;
+  private String senha;
   private static final String ROLE = "ROLE_";
+
+  private Collection<? extends GrantedAuthority> authorities;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,30 +30,12 @@ public class CustomAuthentication implements Authentication {
   }
 
   @Override
-  public @Nullable Object getCredentials() {
-    return null;
+  public String getPassword() {
+    return usuario.getSenha();
   }
 
   @Override
-  public @Nullable Object getDetails() {
-    return usuario;
-  }
-
-  @Override
-  public @Nullable Object getPrincipal() {
-    return usuario;
-  }
-
-  @Override
-  public boolean isAuthenticated() {
-    return true;
-  }
-
-  @Override
-  public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {}
-
-  @Override
-  public String getName() {
+  public String getUsername() {
     return usuario.getEmail();
   }
 }

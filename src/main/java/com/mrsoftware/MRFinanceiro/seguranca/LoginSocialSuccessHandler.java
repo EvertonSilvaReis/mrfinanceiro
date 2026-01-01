@@ -1,17 +1,16 @@
 package com.mrsoftware.MRFinanceiro.seguranca;
 
-import com.mrsoftware.MRFinanceiro.dtos.usuario.UsuarioEntradaDTO;
-import com.mrsoftware.MRFinanceiro.dtos.usuario.UsuarioRetornoDTO;
-import com.mrsoftware.MRFinanceiro.modelo.builder.UsuarioBuilder;
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Usuario;
-import com.mrsoftware.MRFinanceiro.modelo.enumeradores.ETipoUsuario;
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.UsuarioServico;
+import com.mrsoftware.MRFinanceiro.seguranca.jwt.JwtUtils;
+import com.mrsoftware.MRFinanceiro.seguranca.servico.UserDetailsImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
   private final UsuarioServico usuarioServico;
-  private static final String SENHA_PADRAO_CADASTRO_VIA_GOOGLE = "api-mr-financeiro@mr";
+  private final JwtUtils jwtUtils;
 
   @Override
   public void onAuthenticationSuccess(
@@ -40,19 +39,19 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
     Optional<Usuario> usuario = usuarioServico.obterUsuarioPorEmail(email);
 
     if (usuario.isEmpty()) {
-      UsuarioRetornoDTO usuarioCadastrado =
-          usuarioServico.cadastrar(
-              new UsuarioEntradaDTO(
-                  nome, email, SENHA_PADRAO_CADASTRO_VIA_GOOGLE, ETipoUsuario.USUARIO.getCodigo()));
-      contextAuthentication(
-          new UsuarioBuilder()
-              .addUsuarioRetornoDTO(usuarioCadastrado)
-              .buildDtoRetornoParaEntidade());
+      throw new InternalAuthenticationServiceException("Usuário não cadastrado: " + email);
     } else {
-      contextAuthentication(usuario.get());
-    }
+      UserDetailsImpl userDetails = new UserDetailsImpl();
+      userDetails.setUsuario(usuario.get());
+      userDetails.setEmail(usuario.get().getEmail());
+      userDetails.setSenha(usuario.get().getSenha());
 
-    super.onAuthenticationSuccess(request, response, authentication);
+      String token = jwtUtils.gerarToken(userDetails);
+
+      String redirectUrl = "http://localhost:8080/rest/token=" + token;
+
+      getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+    }
   }
 
   private void contextAuthentication(Usuario usuario) {
