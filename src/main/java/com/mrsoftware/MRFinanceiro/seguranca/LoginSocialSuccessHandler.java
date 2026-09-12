@@ -5,6 +5,7 @@ import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.UsuarioServico;
 import com.mrsoftware.MRFinanceiro.seguranca.jwt.JwtUtils;
 import com.mrsoftware.MRFinanceiro.seguranca.servico.UserDetailsImpl;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,7 +35,6 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
         (OAuth2AuthenticationToken) authentication;
     OAuth2User principal = oAuth2AuthenticationToken.getPrincipal();
     String email = principal.getAttribute("email");
-    String nome = principal.getAttribute("name");
 
     Optional<Usuario> usuario = usuarioServico.obterUsuarioPorEmail(email);
 
@@ -48,13 +48,16 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
 
       String token = jwtUtils.gerarToken(userDetails);
 
-      String redirectUrl = "http://localhost:8080/rest/token=" + token;
+        Cookie jwtCookie = new Cookie("accessToken", token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+
+        response.addCookie(jwtCookie);
+
+      String redirectUrl = "http://127.0.0.1:5500/index.html#";
 
       getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
-  }
-
-  private void contextAuthentication(Usuario usuario) {
-    SecurityContextHolder.getContext().setAuthentication(new CustomAuthentication(usuario));
   }
 }

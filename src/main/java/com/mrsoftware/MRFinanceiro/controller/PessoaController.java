@@ -12,10 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Validated
 @RestController
 @RequestMapping("pessoa")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PessoaController {
 
   private final PessoaServico pessoaServico;
@@ -49,5 +52,11 @@ public class PessoaController {
   public ResponseEntity<Void> excluir(@PathVariable("idPessoa") String idPessoa) {
     pessoaServico.excluir(idPessoa);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  //falta fazer teste de integração
+  @GetMapping
+  public ResponseEntity<List<PessoaRetornoDTO>> retorarTodasPessoas() {
+      return new ResponseEntity(pessoaServico.retornarTodasPessoas(), HttpStatus.OK);
   }
 }

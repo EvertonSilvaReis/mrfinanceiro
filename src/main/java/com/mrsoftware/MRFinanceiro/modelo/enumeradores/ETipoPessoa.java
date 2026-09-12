@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public enum ETipoPessoa {
-  FISICA("FISICA", 0),
-  JURIDICA("JURIDICA", 1);
+  CLIENTE("CLIENTE", 0),
+  FORNECEDOR("FORNECEDOR", 1);
 
   private String tipo;
   private int codigo;

@@ -16,17 +16,18 @@ import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.ConfiguracaoServico
 import com.mrsoftware.MRFinanceiro.modelo.servico.interfaces.PessoaServico;
 import com.mrsoftware.MRFinanceiro.util.IdUtil;
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -134,6 +135,13 @@ public class PessoaServicoImpl implements PessoaServico {
       log.error(MENSAGEM_ERRO, "excluir", ex);
       throw new InternalServerErrorException(EValidacao.NAO_IDENTIFICADO);
     }
+  }
+
+  //falta fazer teste unitario
+  @Override
+  public List<PessoaRetornoDTO> retornarTodasPessoas() {
+      List<Pessoa> pessoas = pessoaRepositorio.findAll();
+      return new PessoaBuilder().addListaPessoas(pessoas).buildRetornoListaPessoas();
   }
 
   private void adicionaCodigoPessoa(Pessoa pessoa) {

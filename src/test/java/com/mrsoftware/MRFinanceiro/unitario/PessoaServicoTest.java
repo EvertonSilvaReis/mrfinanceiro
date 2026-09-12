@@ -246,7 +246,7 @@ public class PessoaServicoTest {
         .cpfCnpj("12345678901")
         .codigo("000001")
         .dataCadastro(LocalDate.now())
-        .tipoPessoa(ETipoPessoa.FISICA)
+        .tipoPessoa(ETipoPessoa.CLIENTE)
         .build();
   }
 

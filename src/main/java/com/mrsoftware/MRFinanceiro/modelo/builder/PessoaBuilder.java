@@ -5,13 +5,18 @@ import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Pessoa;
 import com.mrsoftware.MRFinanceiro.modelo.enumeradores.ETipoPessoa;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class PessoaBuilder {
   private PessoaEntradaDTO pessoaEntradaDTO;
   private Pessoa pessoa;
+  private List<Pessoa> pessoas;
 
   public PessoaBuilder addPessoaEntrada(PessoaEntradaDTO pessoaEntradaDTO) {
     this.pessoaEntradaDTO = pessoaEntradaDTO;
@@ -20,6 +25,11 @@ public class PessoaBuilder {
 
   public PessoaBuilder addPessoa(Pessoa pessoa) {
     this.pessoa = pessoa;
+    return this;
+  }
+
+  public PessoaBuilder addListaPessoas(List<Pessoa> pessoas) {
+    this.pessoas = pessoas;
     return this;
   }
 
@@ -34,7 +44,7 @@ public class PessoaBuilder {
 
   public PessoaRetornoDTO buildPessoaParaPessoaRetorno() {
     return PessoaRetornoDTO.builder()
-        .id(pessoa.getId())
+        .codigo(pessoa.getCodigo())
         .nome(pessoa.getNome())
         .cpfCnpj(pessoa.getCpfCnpj())
         .dataCadastro(pessoa.getDataCadastro())
@@ -61,4 +71,24 @@ public class PessoaBuilder {
         .codigo(pessoa.getCodigo())
         .build();
   }
+
+  //falta fazer teste unitário
+    public List<PessoaRetornoDTO> buildRetornoListaPessoas() {
+      List<PessoaRetornoDTO> pessoaRetornoDTOS = new ArrayList<>();
+      this.pessoas.forEach(
+              p -> {
+                  PessoaRetornoDTO pessoaRetornoDTO =
+                          PessoaRetornoDTO.builder()
+                                  .codigo(p.getCodigo())
+                                  .nome(p.getNome())
+                                  .cpfCnpj(p.getCpfCnpj())
+                                  .dataCadastro(p.getDataCadastro())
+                                  .tipoPessoa(p.getTipoPessoa().getCodigo())
+                                  .build();
+                  pessoaRetornoDTOS.add(pessoaRetornoDTO);
+              }
+      );
+
+      return pessoaRetornoDTOS;
+    }
 }

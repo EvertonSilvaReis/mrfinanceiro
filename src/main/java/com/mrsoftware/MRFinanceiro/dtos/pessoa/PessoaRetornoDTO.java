@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PessoaRetornoDTO {
-  private UUID id;
+  private String codigo;
   private String nome;
   private String cpfCnpj;
   private Integer tipoPessoa;

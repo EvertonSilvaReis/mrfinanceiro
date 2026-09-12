@@ -5,6 +5,8 @@ import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaEntradaPaginadaDTO;
 import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoDTO;
 import com.mrsoftware.MRFinanceiro.dtos.pessoa.PessoaRetornoPaginadoDTO;
 import com.mrsoftware.MRFinanceiro.modelo.entidade.Pessoa;
+
+import java.util.List;
 import java.util.UUID;
 
 public interface PessoaServico {
@@ -19,4 +21,6 @@ public interface PessoaServico {
   void excluir(String id);
 
   Pessoa obterPessoaPorId(UUID id);
+
+  List<PessoaRetornoDTO> retornarTodasPessoas();
 }
